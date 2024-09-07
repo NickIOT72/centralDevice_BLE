@@ -110,6 +110,39 @@ static uint8_t ble_data_received(struct bt_nus_client *nus,
 			tx->len++;
 		}
 
+		/*struct uart_data_t *buf = k_malloc(sizeof(*buf));
+
+		if (!buf) {
+			LOG_WRN("Not able to allocate UART send data buffer");
+			return BT_GATT_ITER_CONTINUE;
+		}
+
+		if (buf) {
+		uint16_t pos1 = snprintf(buf->data, sizeof(buf->data),
+			       "Data Received: ");
+
+		if ((pos1 < 0) || (pos1 >= sizeof(buf->data))) {
+			k_free(buf);
+			k_free(tx);
+			LOG_ERR("snprintf returned %d", pos1);
+			return -ENOMEM;
+		}
+
+		buf->len = pos1;
+	} else {
+		k_free(buf);
+		k_free(tx);
+		return -ENOMEM;
+	}
+
+	err = uart_tx(uart, buf->data, buf->len, SYS_FOREVER_MS);
+	if (err) {
+		k_free(buf);
+		k_free(tx);
+		LOG_ERR("Cannot display welcome message (err: %d)", err);
+		return err;
+	}
+	*/
 		err = uart_tx(uart, tx->data, tx->len, SYS_FOREVER_MS);
 		if (err) {
 			k_fifo_put(&fifo_uart_tx_data, tx);
@@ -593,7 +626,7 @@ int main(void)
 		return 0;
 	}
 
-	printk("Starting Bluetooth Central UART example\n");
+	//printk("Starting Central Device\r\n");
 
 	err = bt_scan_start(BT_SCAN_TYPE_SCAN_ACTIVE);
 	if (err) {
